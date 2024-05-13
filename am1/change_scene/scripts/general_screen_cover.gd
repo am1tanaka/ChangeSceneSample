@@ -1,23 +1,9 @@
 class_name GeneralScreenCover
-extends Node
+extends ScreenCoverBase
 
 ## 基本的なカバー用スクリプト。
-## start_cover(秒数)でカバー開始。
-## start_uncover(秒数)でカバー解除の開始。
-
-## 画面を隠す処理が完了したら、発行するシグナル。
-signal covered
-
-## 画面の覆いを外し終えたら、発行するシグナル
-signal uncovered
-
-const ANIM_COVERING := "covering"
-const ANIM_COVERED := "covered"
-const ANIM_UNCOVERING := "uncovering"
-const ANIM_UNCOVERED := "uncovered"
-
-## デフォルトのカバーの色
-const DEFAULT_COVER_COLOR := Color.BLACK
+## cover(秒数)でカバー開始。
+## uncover(秒数)でカバー解除の開始。
 
 @onready var _animation_player := $AnimationPlayer
 @onready var _color_rect := $ColorRect
@@ -49,10 +35,3 @@ func uncover(sec: float = 0.0) ->void:
 	_animation_player.speed_scale = 1.0 / sec
 	_animation_player.play(ANIM_UNCOVERING)
 
-## カバーが完了したら、アニメから呼ぶ	
-func _covered():
-	covered.emit()
-
-## カバーを解除したら、アニメから呼ぶ
-func _uncovered():
-	uncovered.emit()
