@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://c7xjp3dv65qd6"]
+[gd_scene load_steps=2 format=3 uid="uid://c7xjp3dv65qd6"]
+
+[ext_resource type="Script" path="res://am1/change_scene/demo/scripts/title.gd" id="1_5fgcf"]
 
 [node name="Title" type="Control"]
 layout_mode = 3
@@ -7,6 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_5fgcf")
 
 [node name="Button" type="Button" parent="."]
 custom_minimum_size = Vector2(240, 80)
@@ -38,3 +41,5 @@ offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
 text = "シーン切り替えサンプル"
+
+[connection signal="pressed" from="Button" to="." method="_on_game_start"]

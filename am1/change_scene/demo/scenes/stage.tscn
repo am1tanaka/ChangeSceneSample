@@ -26,4 +26,4 @@ position = Vector2(554, 450)
 position = Vector2(714, 180)
 
 [node name="Clickable8" parent="." instance=ExtResource("1_gnma3")]
-position = Vector2(252, 320)
+position = Vector2(989, 522)
