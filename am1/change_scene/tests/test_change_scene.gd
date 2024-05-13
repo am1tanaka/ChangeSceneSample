@@ -25,7 +25,9 @@ func test_fundamental() -> void:
 	title._on_game_start()
 
 	# ゲーム開始のシーンの読み込み完了待ち
-	await SceneChanger.all_scenes_loaded
+	await wait_seconds(3)
+	await wait_for_signal(SceneChanger.all_scenes_loaded, 2)
+	assert_signal_emitted(SceneChanger, "all_scenes_loaded", "シーン読み込み完了シグナル")
 	assert_eq(_all_scenes_loaded_count, 1, "ゲームシーンの読み込み完了")
 	
 	# ゲームの起動を確認

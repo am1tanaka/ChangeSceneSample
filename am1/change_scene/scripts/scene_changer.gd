@@ -42,6 +42,7 @@ var _async_load_count : int = 0
 
 ## 指定秒数でシーンをカバーして、指定のシーンを読み込む。
 func cover_and_change_scene(cover: ScreenCoverBase, cover_seconds: float, cover_color: Color, load_scenes: LoadSceneArray):
+
 	# 画面を覆う処理の開始
 	_cover = cover
 	if _cover.get_parent() != self:
@@ -76,6 +77,7 @@ func cover_and_change_scene(cover: ScreenCoverBase, cover_seconds: float, cover_
 	
 	# 読み込み完了
 	all_scenes_loaded.emit()
+	print("all_scenes_loaded")
 
 ## 非同期読み込みのシーンの
 func _wait_async_loaded_and_ready(load_scenes: LoadSceneArray):

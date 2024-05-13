@@ -1,8 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://de7q3cm4iopuv"]
+[gd_scene load_steps=3 format=3 uid="uid://de7q3cm4iopuv"]
 
+[ext_resource type="Script" path="res://am1/change_scene/demo/scripts/stage.gd" id="1_bdr2u"]
 [ext_resource type="PackedScene" uid="uid://dgb6ogs00dc60" path="res://am1/change_scene/demo/scenes/clickable.tscn" id="1_gnma3"]
 
 [node name="Stage" type="Node"]
+script = ExtResource("1_bdr2u")
 
 [node name="Clickable" parent="." instance=ExtResource("1_gnma3")]
 position = Vector2(186, 146)
