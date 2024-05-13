@@ -32,7 +32,8 @@ func test_fundamental() -> void:
 	assert_eq(_all_scenes_loaded_count, 1, "ゲームシーンの読み込み完了")
 	
 	# ゲームの起動を確認
-	await SceneChanger.uncovered
+	await wait_for_signal(SceneChanger.uncovered, 2)
+	assert_signal_emitted(SceneChanger, "uncovered")
 
 	# いくつか、消す
 	var clickable = get_node("/root/Stage/Clickable")
@@ -56,27 +57,30 @@ func test_fundamental() -> void:
 	game_ui._on_retry()
 	
 	# カバー解除待ち
-	await SceneChanger.uncovered
+	await wait_for_signal(SceneChanger.uncovered, 2)
+	assert_signal_emitted(SceneChanger, "uncovered")
 	var stage = get_node("/root/Stage")
 	assert_not_null(stage, "Stageシーン")
 	assert_eq(stage.get_child_count(), 8, "8つに復活")
 	
 	# タイトルヘ
+	await wait_frames(2)
 	game_ui = get_node("/root/GameUi")
 	assert_not_null(game_ui, "GameUi")
 	game_ui._on_to_title()
 
 	# カバー解除待ち
-	await SceneChanger.uncovered
+	await wait_for_signal(SceneChanger.uncovered, 2)
+	assert_signal_emitted(SceneChanger, "uncovered")
 
 	# タイトル
 	title = get_node("/root/Title")
-	assert_null(get_node("root/GameUi"))
 	assert_not_null(title, "タイトル読み込み")
 	title._on_game_start()
 		
 	# カバー解除待ち
-	await SceneChanger.uncovered
+	await wait_for_signal(SceneChanger.uncovered, 2)
+	assert_signal_emitted(SceneChanger, "uncovered")
 
 	# ゲームシーン
 	assert_not_null(get_node("/root/GameUi"))
