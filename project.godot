@@ -11,8 +11,17 @@ config_version=5
 [application]
 
 config/name="Change Scene Sample"
+run/main_scene="res://am1/change_scene/demo/scenes/title.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[autoload]
+
+SceneChanger="*res://am1/change_scene/scripts/scene_changer.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gut/plugin.cfg")
 
 [rendering]
 

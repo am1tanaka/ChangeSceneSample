@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3 uid="uid://de7q3cm4iopuv"]
+
+[ext_resource type="PackedScene" uid="uid://dgb6ogs00dc60" path="res://am1/change_scene/demo/scenes/clickable.tscn" id="1_gnma3"]
+
+[node name="Stage" type="Node"]
+
+[node name="Clickable" parent="." instance=ExtResource("1_gnma3")]
+position = Vector2(186, 146)
+
+[node name="Clickable2" parent="." instance=ExtResource("1_gnma3")]
+position = Vector2(492, 228)
+
+[node name="Clickable3" parent="." instance=ExtResource("1_gnma3")]
+position = Vector2(912, 150)
+
+[node name="Clickable4" parent="." instance=ExtResource("1_gnma3")]
+position = Vector2(798, 390)
+
+[node name="Clickable5" parent="." instance=ExtResource("1_gnma3")]
+position = Vector2(266, 504)
+
+[node name="Clickable6" parent="." instance=ExtResource("1_gnma3")]
+position = Vector2(554, 450)
+
+[node name="Clickable7" parent="." instance=ExtResource("1_gnma3")]
+position = Vector2(714, 180)
+
+[node name="Clickable8" parent="." instance=ExtResource("1_gnma3")]
+position = Vector2(252, 320)
