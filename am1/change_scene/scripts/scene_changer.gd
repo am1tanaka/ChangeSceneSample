@@ -51,8 +51,16 @@ var _async_load_count : int = 0
 ## 解放しないシーンの名前。
 var _ignore_scene_names: Dictionary = {}
 
+## 切り替え中のとき、true
+var _is_changing: bool = false
+func is_changing() -> bool:
+	return _is_changing
+
 ## 指定秒数でシーンをカバーして、指定のシーンを読み込む。
 func cover_and_change_scene(cover: ScreenCoverBase, cover_seconds: float, cover_color: Color, load_scenes: LoadSceneArray):
+	if is_changing():
+		return
+	_is_changing = true
 
 	# 画面を覆う処理の開始
 	_cover = cover
@@ -91,6 +99,8 @@ func cover_and_change_scene(cover: ScreenCoverBase, cover_seconds: float, cover_
 	
 	# 読み込み完了
 	all_scenes_loaded.emit()
+	
+	_is_changing = false
 
 ## 非同期読み込みのシーンの読み込み開始。
 func _wait_async_loaded_and_ready():
