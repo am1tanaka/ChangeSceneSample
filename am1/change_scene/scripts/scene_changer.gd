@@ -44,11 +44,16 @@ var _async_load_count : int = 0
 func cover_and_change_scene(cover: ScreenCoverBase, cover_seconds: float, cover_color: Color, load_scenes: LoadSceneArray):
 	# 画面を覆う処理の開始
 	_cover = cover
+	if _cover.get_parent() != self:
+		_cover.reparent(self)
 	_cover.cover(cover_seconds, cover_color)
 	
 	# 非同期読み込み開始
 	_async_loading_scenes.clear()
 	_reload_scenes.clear()
+	if load_scenes == null:
+		push_error("シーンが未設定です。")
+		return
 	for scene in load_scenes.load_scene_array:
 		_start_async_load_scene(scene)
 
@@ -74,9 +79,9 @@ func cover_and_change_scene(cover: ScreenCoverBase, cover_seconds: float, cover_
 
 ## 非同期読み込みのシーンの
 func _wait_async_loaded_and_ready(load_scenes: LoadSceneArray):
-	var loaded_scenes : Array[LoadSceneData]
+	var loaded_scenes : Array[LoadSceneData] = []
 	var root := get_tree().root
-	var added_scenes : Array[Node]
+	var added_scenes : Array[Node] = []
 	
 	# 読み込みが完了したシーンを、ルートに組み込む
 	while (_async_loading_scenes.size() > 0) || (_async_load_count > 0):
@@ -118,7 +123,7 @@ func _unload_unnecessary_scenes(load_scenes: LoadSceneArray) -> void:
 	for root_scene in root_scenes:
 		if !_is_necessary_scene(root_scene, load_scenes):
 			_free_scenes_count += 1
-			root_scene.tree_exited.connect()	
+			root_scene.tree_exited.connect(_on_free_tree_exited)	
 			root_scene.queue_free()
 
 ## シーンが解放されたときに呼び出して、解放数を減らす
@@ -135,7 +140,7 @@ func _is_necessary_scene(root_scene: Node, load_scenes: LoadSceneArray) -> bool:
 
 	# 読み込みリストにある場合、is_reloadがfalseなら必要
 	for scene in load_scenes.load_scene_array:
-		if root_scene.scene_file_path == scene.scene_file_path:
+		if root_scene.scene_file_path == scene.scene_path:
 			return !scene.is_reload
 
 	# 該当しなければ不要
@@ -156,7 +161,7 @@ func _start_async_load_scene(scene: LoadSceneData) -> void:
 	# なければ、非同期読み込み開始
 	if node_instance == null:
 		_async_loading_scenes.append(scene)
-		ResourceLoader.load_threaded_request(scene.file_path)
+		ResourceLoader.load_threaded_request(scene.scene_path)
 	elif scene.is_reload:
 		# あれば、リロードならリロード候補へ追加
 		_reload_scenes.append(scene)
