@@ -6,10 +6,14 @@ extends Node
 ## シーンの切り替えだけ必要なら、change_scene関数。
 ## 初期化が必要なシーンは、_ready内で、SceneChanger.all_scenes_loadedシグナルに処理を登録する。
 ## シーンリストにない、自動読み込みではないシーンは、画面を隠したあとに自動的に解放する。
-## load_scenes_async関数で、配列で渡したシーンを読み込む。すでに読み込み済みのシーンは何もしない。
 ## 読み込み終えたら、all_scenes_loadedシグナルを発行する。
-## unload_scene関数で、指定のシーンを解放する。シーンがないときは何もしない。
 ## すべてのシーンが解放されたら、all_scenes_unloadedシグナルを発行する。
+## 画面をカバーしたら、coveredシグナルを発行。
+## 画面のカバーが解除したら、uncoveredシグナルを発行。これでゲームを開始。
+## Gutなどの、児童読み込み以外で、解放してはいけないシーンは、名前をappend_ignore_scene_name関数で登録。
+## 解放を禁じるシーン名は、remove_ignore_scene_name関数で削除できる。
+## (保留)load_scenes_async関数で、配列で渡したシーンを読み込む。すでに読み込み済みのシーンは何もしない。
+## (保留)unload_scene関数で、指定のシーンを解放する。シーンがないときは何もしない。
 
 ## すべてのシーンの読み込みが完了したら発行するシグナル。
 signal all_scenes_loaded
