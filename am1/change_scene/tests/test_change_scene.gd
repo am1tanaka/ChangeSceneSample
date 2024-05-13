@@ -12,9 +12,11 @@ var _all_scenes_unloaded_count := 0
 func before_each():
 	_title = TITLE_SCENE.instantiate()
 	get_tree().root.add_child(_title)
+	SceneChanger.append_ignore_scene_name("GutRunner")
 
 func after_each():
-	_title.free()
+	if _title != null:
+		_title.free()
 	_title = null
 
 func test_fundamental() -> void:
@@ -25,7 +27,6 @@ func test_fundamental() -> void:
 	title._on_game_start()
 
 	# ゲーム開始のシーンの読み込み完了待ち
-	await wait_seconds(3)
 	await wait_for_signal(SceneChanger.all_scenes_loaded, 2)
 	assert_signal_emitted(SceneChanger, "all_scenes_loaded", "シーン読み込み完了シグナル")
 	assert_eq(_all_scenes_loaded_count, 1, "ゲームシーンの読み込み完了")
@@ -45,24 +46,25 @@ func test_fundamental() -> void:
 
 	clickable = get_node("/root/Stage/Clickable7")
 	clickable.queue_free()
-	await wait_seconds(1)
+	await wait_seconds(0.5)
 
-	assert_eq(get_node("/root/Stagte").get_child_count(), 4, "4つ消した")
+	assert_eq(get_node("/root/Stage").get_child_count(), 4, "4つ消した")
 	
 	# リトライ
-	var retry = get_node("/root/GameUi/HSplitContainer/RetryButton")
-	assert_not_null(retry, "リトライボタン")
-	retry._on_retry()
+	var game_ui = get_node("/root/GameUi")
+	assert_not_null(game_ui, "GameUi")
+	game_ui._on_retry()
 	
 	# カバー解除待ち
 	await SceneChanger.uncovered
-	var stage = get_node("/root/Stage/")
+	var stage = get_node("/root/Stage")
+	assert_not_null(stage, "Stageシーン")
 	assert_eq(stage.get_child_count(), 8, "8つに復活")
 	
 	# タイトルヘ
-	var title_button = get_node("/root/GameUi/HSplitContainer/TitleButton")
-	assert_not_null(title_button, "タイトルボタン")
-	title_button._on_to_title()
+	game_ui = get_node("/root/GameUi")
+	assert_not_null(game_ui, "GameUi")
+	game_ui._on_to_title()
 
 	# カバー解除待ち
 	await SceneChanger.uncovered

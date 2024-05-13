@@ -1,4 +1,18 @@
-[gd_scene format=3 uid="uid://bd07j1bxjwgnt"]
+[gd_scene load_steps=7 format=3 uid="uid://bd07j1bxjwgnt"]
+
+[ext_resource type="Script" path="res://am1/change_scene/demo/scripts/game_ui.gd" id="1_jjxol"]
+[ext_resource type="Script" path="res://am1/change_scene/scripts/load_scene_array.gd" id="2_tmokp"]
+[ext_resource type="Resource" uid="uid://bhmecg5tusb3j" path="res://am1/change_scene/demo/settings/game_scenes.tres" id="2_y228t"]
+[ext_resource type="Script" path="res://am1/change_scene/scripts/load_scene_data.gd" id="3_r3w5e"]
+
+[sub_resource type="Resource" id="Resource_dk3q2"]
+script = ExtResource("3_r3w5e")
+scene_path = "res://am1/change_scene/demo/scenes/title.tscn"
+is_reload = false
+
+[sub_resource type="Resource" id="Resource_chgkv"]
+script = ExtResource("2_tmokp")
+load_scene_array = Array[ExtResource("3_r3w5e")]([SubResource("Resource_dk3q2")])
 
 [node name="GameUi" type="Control"]
 layout_mode = 3
@@ -7,6 +21,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_jjxol")
+_retry_scenes = ExtResource("2_y228t")
+_title_scene = SubResource("Resource_chgkv")
 
 [node name="HSplitContainer" type="HSplitContainer" parent="."]
 layout_mode = 1
@@ -31,3 +49,6 @@ text = "リトライ"
 custom_minimum_size = Vector2(80, 40)
 layout_mode = 2
 text = "タイトルヘ"
+
+[connection signal="pressed" from="HSplitContainer/RetryButton" to="." method="_on_retry"]
+[connection signal="pressed" from="HSplitContainer/TitleButton" to="." method="_on_to_title"]

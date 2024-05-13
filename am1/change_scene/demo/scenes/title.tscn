@@ -1,22 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://c7xjp3dv65qd6"]
+[gd_scene load_steps=3 format=3 uid="uid://c7xjp3dv65qd6"]
 
 [ext_resource type="Script" path="res://am1/change_scene/demo/scripts/title.gd" id="1_5fgcf"]
-[ext_resource type="Script" path="res://am1/change_scene/scripts/load_scene_data.gd" id="2_neq43"]
-[ext_resource type="Script" path="res://am1/change_scene/scripts/load_scene_array.gd" id="3_r00dx"]
-
-[sub_resource type="Resource" id="Resource_tbusq"]
-script = ExtResource("2_neq43")
-scene_path = "res://am1/change_scene/demo/scenes/game_ui.tscn"
-is_reload = false
-
-[sub_resource type="Resource" id="Resource_3u4pe"]
-script = ExtResource("2_neq43")
-scene_path = "res://am1/change_scene/demo/scenes/stage.tscn"
-is_reload = true
-
-[sub_resource type="Resource" id="Resource_scaxp"]
-script = ExtResource("3_r00dx")
-load_scene_array = Array[ExtResource("2_neq43")]([SubResource("Resource_tbusq"), SubResource("Resource_3u4pe")])
+[ext_resource type="Resource" uid="uid://bhmecg5tusb3j" path="res://am1/change_scene/demo/settings/game_scenes.tres" id="2_hhkhw"]
 
 [node name="Title" type="Control"]
 layout_mode = 3
@@ -26,7 +11,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_5fgcf")
-_game_scenes = SubResource("Resource_scaxp")
+_game_scenes = ExtResource("2_hhkhw")
 
 [node name="Button" type="Button" parent="."]
 custom_minimum_size = Vector2(240, 80)

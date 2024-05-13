@@ -28,6 +28,9 @@ signal all_scenes_freed
 
 ## 画面を隠す処理のインスタンス
 var _cover: ScreenCoverBase
+## 設定されているカバーのインスタンスを返す。
+func get_current_cover_instance():
+	return _cover
 
 var _async_loading_scenes: Array[LoadSceneData]
 
@@ -40,12 +43,18 @@ var _free_scenes_count :int = 0
 ## 非同期読み込み中のシーンの数。readyが送られてきたら、減らす
 var _async_load_count : int = 0
 
+## 解放しないシーンの名前。
+var _ignore_scene_names: Dictionary = {}
+
 ## 指定秒数でシーンをカバーして、指定のシーンを読み込む。
 func cover_and_change_scene(cover: ScreenCoverBase, cover_seconds: float, cover_color: Color, load_scenes: LoadSceneArray):
 
 	# 画面を覆う処理の開始
 	_cover = cover
-	if _cover.get_parent() != self:
+	if _cover.get_parent() == null:
+		add_child(_cover)
+		await get_tree().process_frame
+	elif _cover.get_parent() != self:
 		_cover.reparent(self)
 	_cover.cover(cover_seconds, cover_color)
 	
@@ -73,14 +82,13 @@ func cover_and_change_scene(cover: ScreenCoverBase, cover_seconds: float, cover_
 		ResourceLoader.load_threaded_request(scene.scene_path)
 
 	# シーンの読み込みとシーン追加の完了待ち
-	await _wait_async_loaded_and_ready(load_scenes)
+	await _wait_async_loaded_and_ready()
 	
 	# 読み込み完了
 	all_scenes_loaded.emit()
-	print("all_scenes_loaded")
 
-## 非同期読み込みのシーンの
-func _wait_async_loaded_and_ready(load_scenes: LoadSceneArray):
+## 非同期読み込みのシーンの読み込み開始。
+func _wait_async_loaded_and_ready():
 	var loaded_scenes : Array[LoadSceneData] = []
 	var root := get_tree().root
 	var added_scenes : Array[Node] = []
@@ -90,7 +98,7 @@ func _wait_async_loaded_and_ready(load_scenes: LoadSceneArray):
 		loaded_scenes.clear()
 
 		# 読み込み完了を確認
-		for scene in load_scenes.load_scene_array:
+		for scene in _async_loading_scenes:
 			var status = ResourceLoader.load_threaded_get_status(scene.scene_path) as ResourceLoader.ThreadLoadStatus
 			if status == ResourceLoader.THREAD_LOAD_LOADED:
 				# 読み込み完了
@@ -139,6 +147,10 @@ func _is_necessary_scene(root_scene: Node, load_scenes: LoadSceneArray) -> bool:
 	# 自動読み込みなら必要
 	if SceneChanger.is_autoload_scene(root_scene.name):
 		return true
+	
+	# 無効なシーン名なら必要
+	if _ignore_scene_names.has(root_scene.name):
+		return true
 
 	# 読み込みリストにある場合、is_reloadがfalseなら必要
 	for scene in load_scenes.load_scene_array:
@@ -184,11 +196,21 @@ func uncover(uncover_seconds: float):
 		uncovered.emit()
 		return
 
-	_cover.uncovered.connect(_on_uncovered)
+	if !_cover.uncovered.is_connected(_on_uncovered):
+		_cover.uncovered.connect(_on_uncovered)
 	_cover.uncover(uncover_seconds)
 
 ## カバーが解除されたときの処理
 func _on_uncovered():
 	_cover.uncovered.disconnect(_on_uncovered)
 	uncovered.emit()
+
+## 自動解放しないシーンを名前で設定。
+func append_ignore_scene_name(scene_name: String):
+	if !_ignore_scene_names.has(scene_name):
+		_ignore_scene_names[scene_name] = true
+
+## 自動解放しないシーン名を解除。
+func remove_ignore_scene_name(scene_name: String)->void:
+	_ignore_scene_names.erase(scene_name)
 
