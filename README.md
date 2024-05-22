@@ -1,5 +1,7 @@
 # 【Godot】場面切り替えサンプル
 
+こちらの本の内容を反映させた、起動と、場面切り替え処理のサンプルです。
+
 ## バージョン情報
 
 - Godot 4.2.2
@@ -87,3 +89,8 @@ GUTのインストールが必要です。
 - [シーン切り替え](docs/change-scene.md)
 - [起動](docs/boot.md)
 
+## 使用アセット
+
+- Splashスクリーンの画像
+  - [KenneyNL. Godot SplashScreens](https://github.com/KenneyNL/Godot-SplashScreens)
+    - Screen/Reimagined logo/your-logo-here-dark.png を使用しました
