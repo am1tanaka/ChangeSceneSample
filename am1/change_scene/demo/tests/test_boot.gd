@@ -67,11 +67,11 @@ func test_title_boot():
 	await wait_frames(2)
 	
 	# キャラを消す
-	_click(get_node("/root/Stage/Clickable2"))
+	get_node("/root/Stage/Clickable2").free_me()
 	await wait_frames(1)
-	_click(get_node("/root/Stage/Clickable4"))
+	get_node("/root/Stage/Clickable4").free_me()
 	await wait_frames(1)
-	_click(get_node("/root/Stage/Clickable6"))
+	get_node("/root/Stage/Clickable6").free_me()
 	await wait_seconds(2)
 	
 	# 再起動
@@ -81,19 +81,30 @@ func test_title_boot():
 
 	assert_true(_assert_scene("GameUi"), "ゲーム起動")	
 	assert_true(_assert_scene("Stage"), "ステージ起動")
-	assert_not_null(get_node("/root/Stage/Clickable"), "Clickableあり")
-	assert_not_null(get_node("/root/Stage/Clickable3"), "Clickable3あり")
-	assert_not_null(get_node("/root/Stage/Clickable5"), "Clickable5あり")
-	assert_not_null(get_node("/root/Stage/Clickable7"), "Clickable7あり")
-	assert_not_null(get_node("/root/Stage/Clickable8"), "Clickable8あり")
+	assert_not_null(get_node_or_null("/root/Stage/Clickable"), "Clickableあり")
+	assert_not_null(get_node_or_null("/root/Stage/Clickable3"), "Clickable3あり")
+	assert_not_null(get_node_or_null("/root/Stage/Clickable5"), "Clickable5あり")
+	assert_not_null(get_node_or_null("/root/Stage/Clickable7"), "Clickable7あり")
+	assert_not_null(get_node_or_null("/root/Stage/Clickable8"), "Clickable8あり")
 
-	assert_not_null(get_node("/root/Stage/Clickable2"), "Clickable2なし")
-	assert_not_null(get_node("/root/Stage/Clickable4"), "Clickable4なし")
-	assert_not_null(get_node("/root/Stage/Clickable6"), "Clickable6なし")
+	assert_null(get_node_or_null("/root/Stage/Clickable2"), "Clickable2なし")
+	assert_null(get_node_or_null("/root/Stage/Clickable4"), "Clickable4なし")
+	assert_null(get_node_or_null("/root/Stage/Clickable6"), "Clickable6なし")
+
+	# もう一度、ゲームを起動
+	get_node("/root/GameUi").queue_free()
+	get_node("/root/Stage").queue_free()
+	await _boot()
+
+	assert_true(_assert_scene("GameUi"), "ゲーム起動")	
+	assert_true(_assert_scene("Stage"), "ステージ起動")
+	assert_null(get_node_or_null("/root/Stage/Clickable2"), "Clickable2なし")
+	assert_null(get_node_or_null("/root/Stage/Clickable4"), "Clickable4なし")
+	assert_null(get_node_or_null("/root/Stage/Clickable6"), "Clickable6なし")
 
 	# リトライ
-	get_node("/root/GameUi")._on_retry()
 	await wait_frames(2)
+	get_node("/root/GameUi")._on_retry()
 	await SceneChanger.uncovered
 	
 	# 再起動
@@ -104,14 +115,14 @@ func test_title_boot():
 	# ゲームがまっさらな状態で開始
 	assert_true(_assert_scene("GameUi"), "ゲーム起動")	
 	assert_true(_assert_scene("Stage"), "ステージ起動")
-	assert_not_null(get_node("/root/Stage/Clickable"), "Clickableあり")
-	assert_not_null(get_node("/root/Stage/Clickable2"), "Clickable2あり")
-	assert_not_null(get_node("/root/Stage/Clickable3"), "Clickable3あり")
-	assert_not_null(get_node("/root/Stage/Clickable4"), "Clickable4あり")
-	assert_not_null(get_node("/root/Stage/Clickable5"), "Clickable5あり")
-	assert_not_null(get_node("/root/Stage/Clickable6"), "Clickable6あり")
-	assert_not_null(get_node("/root/Stage/Clickable7"), "Clickable7あり")
-	assert_not_null(get_node("/root/Stage/Clickable8"), "Clickable8あり")
+	assert_not_null(get_node_or_null("/root/Stage/Clickable"), "Clickableあり")
+	assert_not_null(get_node_or_null("/root/Stage/Clickable2"), "Clickable2あり")
+	assert_not_null(get_node_or_null("/root/Stage/Clickable3"), "Clickable3あり")
+	assert_not_null(get_node_or_null("/root/Stage/Clickable4"), "Clickable4あり")
+	assert_not_null(get_node_or_null("/root/Stage/Clickable5"), "Clickable5あり")
+	assert_not_null(get_node_or_null("/root/Stage/Clickable6"), "Clickable6あり")
+	assert_not_null(get_node_or_null("/root/Stage/Clickable7"), "Clickable7あり")
+	assert_not_null(get_node_or_null("/root/Stage/Clickable8"), "Clickable8あり")
 	
 	# タイトルへ
 	await wait_frames(2)
@@ -135,13 +146,6 @@ func _boot() -> void:
 	var boot = BOOT_SCENE.instantiate()
 	get_tree().root.add_child(boot)
 	await SceneChanger.uncovered
-
-
-## 指定のオブジェクトをクリックする。
-func _click(target: Area2D) -> void:
-	var sender = InputSender.new(target)
-	sender.mouse_left_button_down(target.position)
-	sender.mouse_left_button_up(target.position)
 
 
 ## 指定のシーンがあるなら、trueを返す。

@@ -40,6 +40,10 @@ var _destroyed_characters : Array[int] = []
 func _ready() -> void:
 	load_settings()
 
+## 終了時に保存する。
+func _exit_tree():
+	save()
+
 ## データを初期化
 func _init_data():
 	_last_scene = SceneType.TITLE
@@ -58,7 +62,8 @@ func load_settings() -> void:
 	var destroyed_chrs = _config.get_value(SETTING_SECTION_NAME, DESTROYED_CHARACTERS_KEY, "").split(",")
 	_destroyed_characters.clear()
 	for str_index in destroyed_chrs:
-		_destroyed_characters.append(str_index.to_int())
+		if str_index.is_valid_int():
+			_destroyed_characters.append(str_index.to_int())
 
 ## 最後に開いていたシーンを読み取って返す。
 func get_last_scene() -> SceneType:
@@ -67,28 +72,55 @@ func get_last_scene() -> SceneType:
 ## シーンを切り替えたら呼び出して、最後に開いたシーンを保存する。
 func set_and_save_last_scene(scene: SceneType) -> void:
 	_last_scene = scene
-	_destroyed_characters.clear()
-
-	# シーンを切り替えたら、撃破データは削除
-	_config.clear()
 	_config.set_value(SETTING_SECTION_NAME, LAST_SCENE_KEY, scene)
 	save()
 
 ## 撃破したキャラのインデックスをリストで返す。
 func get_destroyed_characters() -> Array[int]:
-	print_debug("TODO 未実装")
-	return []
+	return _destroyed_characters
+
+## 保存ずるまでの秒数。この間、他のものが設定されていたら、まとめて保存する。
+const SAVE_DESTROYED_SECONDS := 1
+
+## 撃破キャラの保存タイマーを作動させていたら、true
+var _is_save_timer_started := false
 
 ## 撃破したキャラのインデックスを設定する。
 func set_destroy_character(chr: int) -> void:
-	print_debug("TODO 未実装")
+	_destroyed_characters.append(chr)
+	if !_is_save_timer_started:
+		_is_save_timer_started = true
+		get_tree().create_timer(SAVE_DESTROYED_SECONDS).timeout.connect(save)
+
+## 撃破キャラのデータを削除する。保存は、別で実行する。
+func delete_destroyed_characters() -> void:
+	_destroyed_characters.clear()
+
+	# シーンを切り替えたら、撃破データは削除
+	_config.set_value(SETTING_SECTION_NAME, DESTROYED_CHARACTERS_KEY, "")
 
 ## 登録したキャラのインデックスを保存する。
 func save() -> void:
+	_set_destroyed_characters_to_config()
 	var err = _config.save(_user_setting_path)
 	if err != OK:
 		push_error("save %s error." % _user_setting_path)
 
+## 撃破インデックスをコンマ区切りにして設定。
+func _set_destroyed_characters_to_config() -> void:
+	_is_save_timer_started = false
+
+	if _destroyed_characters.size() == 0:
+		return
+
+	var merge := ""
+	for i in range(_destroyed_characters.size()):
+		if i > 0:
+			merge = "%s,%d" % [merge, _destroyed_characters[i]]
+		else:
+			merge = "%d" % _destroyed_characters[i]
+
+	_config.set_value(SETTING_SECTION_NAME, DESTROYED_CHARACTERS_KEY, merge)
 
 ## デバッグ用の設定ファイルの接尾語を設定して、該当ファイルを読み込み直す。
 func debug_set_postfix(post: String) -> void:

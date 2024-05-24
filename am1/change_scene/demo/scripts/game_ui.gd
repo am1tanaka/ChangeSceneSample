@@ -14,6 +14,7 @@ func _on_retry():
 		return
 	_change_started = true
 
+	UserSettings.delete_destroyed_characters()
 	SceneChanger.cover_and_change_scene(SceneChanger.get_current_cover_instance(), 0.5, Color.BLACK, _retry_scenes)
 
 func _on_to_title():

@@ -21,6 +21,7 @@ func _init_title() -> void:
 
 ## タイトルの操作開始
 func _start_title() -> void:
+	UserSettings.delete_destroyed_characters()
 	UserSettings.set_and_save_last_scene(UserSettings.SceneType.TITLE)
 	SceneChanger.uncovered.disconnect(_start_title)
 	$Button.disabled = false

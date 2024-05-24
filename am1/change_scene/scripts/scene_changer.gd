@@ -62,7 +62,11 @@ func cover_and_change_scene(cover: ScreenCoverBase, cover_seconds: float, cover_
 		return
 	_is_changing = true
 
-	# 画面を覆う処理の開始
+	# 覆いの種類が変わったら、古いものを削除
+	if (_cover != null) and (_cover != cover):
+		_cover.queue_free()
+
+	# 画面を覆う処理の開始		
 	_cover = cover
 	if _cover.get_parent() == null:
 		add_child(_cover)
