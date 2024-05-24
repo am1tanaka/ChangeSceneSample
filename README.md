@@ -9,6 +9,7 @@
 - [Godot Engine研究ノート](https://techbookfest.org/organization/bgzSCidTdQc0gKCVvM3Ghe)
 </a>
 
+後日、解説を執筆予定です。
 
 ## バージョン情報
 
