@@ -2,24 +2,20 @@ extends Node
 
 ## 起動スクリプト
 
+const COVER_SECONDS := 0.5
+
 ## タイトルのためのシーン
 @export var _title_scenes: LoadSceneArray
 
 ## ゲームのためのシーン
 @export var _game_scenes: LoadSceneArray
 
-@onready var _animation_player := $AnimationPlayer as AnimationPlayer
-
 func _ready():
-	_animation_player.play("show", -1, 3)
-
-## スプラッシュ画面の表示が完了したらアニメーションから呼ばれる。
-func _on_showed():
-	# 設定を読み込む
-	print("設定を読み込む")
-	
-	# 次のシーンを起動へ
-	print("設定に従って、次のシーンを起動する")
-	
-	pass
+	# 設定を確認
+	if UserSettings.get_last_scene() == UserSettings.SceneType.TITLE:
+		# タイトルから起動
+		SceneChanger.cover_and_change_scene($SplashScreen, COVER_SECONDS, Color.WHITE, _title_scenes)
+	else:
+		# ゲームから起動
+		SceneChanger.cover_and_change_scene($SplashScreen, COVER_SECONDS, Color.WHITE, _game_scenes)
 

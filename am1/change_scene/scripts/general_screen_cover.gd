@@ -6,12 +6,12 @@ extends ScreenCoverBase
 ## uncover(秒数)でカバー解除の開始。
 
 @onready var _animation_player := $AnimationPlayer
-@onready var _color_rect := $ColorRect
+@onready var _cover_target := $Cover as Control
 
 ## 指定の秒数で、カバーを開始する。引数を省略したり、0にすると、瞬時に隠し終える。
 func cover(sec: float = 0.0, color: Color = DEFAULT_COVER_COLOR) -> void:
 	# 色設定
-	_color_rect.modulate = color
+	_cover_target.modulate = color
 	
 	# 0なら即時
 	if is_zero_approx(sec):

@@ -6,11 +6,11 @@ const BOOT_SCENE := preload("res://am1/change_scene/demo/scenes/boot.tscn")
 
 func before_all():
 	UserSettings.debug_set_postfix("_test")
-	SceneChanger.append_ignore_scene_name("GutTest")
+	SceneChanger.append_ignore_scene_name("GutRunner")
 
 func after_all():
 	UserSettings.delete_save_data()
-	SceneChanger.remove_ignore_scene_name("GutTest")
+	SceneChanger.remove_ignore_scene_name("GutRunner")
 
 func before_each():
 	UserSettings.delete_save_data()
@@ -21,7 +21,7 @@ func test_boot_scene():
 	# まずはタイトルシーンへ
 	var boot := BOOT_SCENE.instantiate()
 	get_tree().root.add_child(boot)
-	await SceneChanger.uncovered
+	await wait_for_signal(SceneChanger.uncovered, 5, "タイトル起動")
 	assert_true(_assert_scene("Title"), "タイトル起動")
 
 	# ゲームを保存
@@ -30,6 +30,7 @@ func test_boot_scene():
 	await wait_frames(2)
 	UserSettings.load_settings()
 	boot = BOOT_SCENE.instantiate()
+	get_tree().root.add_child(boot)
 	await SceneChanger.uncovered
 	assert_true(_assert_scene("GameUi"), "ゲーム起動")
 	assert_true(_assert_scene("Stage"), "ステージ起動")
@@ -41,6 +42,7 @@ func test_boot_scene():
 	await wait_frames(2)
 	UserSettings.load_settings()
 	boot = BOOT_SCENE.instantiate()
+	get_tree().root.add_child(boot)
 	await SceneChanger.uncovered
 	assert_true(_assert_scene("Title"), "タイトル起動")
 	
