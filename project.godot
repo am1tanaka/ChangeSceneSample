@@ -11,13 +11,15 @@ config_version=5
 [application]
 
 config/name="Change Scene Sample"
-run/main_scene="res://am1/change_scene/demo/scenes/title.tscn"
+run/main_scene="res://am1/change_scene/demo/scenes/boot.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
+boot_splash/show_image=false
 config/icon="res://icon.svg"
 
 [autoload]
 
 SceneChanger="*res://am1/change_scene/scripts/scene_changer.gd"
+UserSettings="*res://am1/change_scene/demo/scripts/user_settings.gd"
 
 [editor_plugins]
 
