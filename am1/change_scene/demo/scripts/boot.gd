@@ -1,5 +1,13 @@
 extends Node
 
+## 起動スクリプト
+
+## タイトルのためのシーン
+@export var _title_scenes: LoadSceneArray
+
+## ゲームのためのシーン
+@export var _game_scenes: LoadSceneArray
+
 @onready var _animation_player := $AnimationPlayer as AnimationPlayer
 
 func _ready():

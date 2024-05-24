@@ -2,10 +2,12 @@
  "background_color": "262626ff",
  "compact_mode": false,
  "configured_dirs": [
-  "res://am1/change_scene/tests"
+  "res://am1/change_scene/tests",
+  "res://am1/change_scene/demo/tests"
  ],
  "dirs": [
-  "res://am1/change_scene/tests"
+  "res://am1/change_scene/tests",
+  "res://am1/change_scene/demo/tests"
  ],
  "disable_colors": false,
  "double_strategy": 1,
