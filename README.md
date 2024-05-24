@@ -6,8 +6,7 @@
 <img src="docs/images/hyoushi.jpg" alt="Godot Engine研究ノート" style="height: 320px">
 </a>
 
-<a href="https://techbookfest.org/organization/bgzSCidTdQc0gKCVvM3Ghe">
-Godot Engine研究ノート
+- [Godot Engine研究ノート](https://techbookfest.org/organization/bgzSCidTdQc0gKCVvM3Ghe)
 </a>
 
 
