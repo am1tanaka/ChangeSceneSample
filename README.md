@@ -1,6 +1,15 @@
 # 【Godot】場面切り替えサンプル
 
-こちらの本の内容を反映させた、起動と、場面切り替え処理のサンプルです。
+こちらの本の内容を反映させた、起動と、場面切り替え処理のサンプルのGodotプロジェクトです。
+
+<a href="https://techbookfest.org/organization/bgzSCidTdQc0gKCVvM3Ghe">
+<img src="docs/images/hyoushi.jpg" alt="Godot Engine研究ノート" style="height: 320px">
+</a>
+
+<a href="https://techbookfest.org/organization/bgzSCidTdQc0gKCVvM3Ghe">
+Godot Engine研究ノート
+</a>
+
 
 ## バージョン情報
 
