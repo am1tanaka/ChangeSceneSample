@@ -36,10 +36,10 @@ func test_boot_scene():
 	assert_true(_assert_scene("Stage"), "ステージ起動")
 	
 	# タイトルへ戻す
-	UserSettings.set_and_save_last_scene(UserSettings.SceneType.TITLE)
 	get_node("/root/GameUi").queue_free()
 	get_node("/root/Stage").queue_free()
 	await wait_frames(2)
+	UserSettings.set_and_save_last_scene(UserSettings.SceneType.TITLE)
 	UserSettings.load_settings()
 	boot = BOOT_SCENE.instantiate()
 	get_tree().root.add_child(boot)
@@ -61,22 +61,22 @@ func test_title_boot():
 	
 	# ゲーム開始
 	await wait_frames(5)
-	$Title._on_game_start()
+	get_node("/root/Title")._on_game_start()
 	await wait_frames(2)
 	await SceneChanger.uncovered
 	await wait_frames(2)
 	
 	# キャラを消す
-	_click($Stage.Clickable2)
+	_click(get_node("/root/Stage/Clickable2"))
 	await wait_frames(1)
-	_click($Stage.Clickable4)
+	_click(get_node("/root/Stage/Clickable4"))
 	await wait_frames(1)
-	_click($Stage.Clickable6)
+	_click(get_node("/root/Stage/Clickable6"))
 	await wait_seconds(2)
 	
 	# 再起動
-	$GameUi.queue_free()
-	$Stage.queue_free()
+	get_node("/root/GameUi").queue_free()
+	get_node("/root/Stage").queue_free()
 	await _boot()
 
 	assert_true(_assert_scene("GameUi"), "ゲーム起動")	
@@ -92,13 +92,13 @@ func test_title_boot():
 	assert_not_null(get_node("/root/Stage/Clickable6"), "Clickable6なし")
 
 	# リトライ
-	$GameUi._on_retry()
+	get_node("/root/GameUi")._on_retry()
 	await wait_frames(2)
 	await SceneChanger.uncovered
 	
 	# 再起動
-	$GameUi.queue_free()
-	$Stage.queue_free()
+	get_node("/root/GameUi").queue_free()
+	get_node("/root/Stage").queue_free()
 	await _boot()
 	
 	# ゲームがまっさらな状態で開始
@@ -115,13 +115,13 @@ func test_title_boot():
 	
 	# タイトルへ
 	await wait_frames(2)
-	$GameUi._on_to_title()
+	get_node("/root/GameUi")._on_to_title()
 	await wait_frames(2)
 	await SceneChanger.uncovered
 	assert_true(_assert_scene("Title"), "タイトル起動")
 	
 	# 再起動
-	$Title.queue_free()
+	get_node("/root/Title").queue_free()
 	await _boot()
 
 	# タイトルチェック
@@ -143,10 +143,6 @@ func _click(target: Area2D) -> void:
 	sender.mouse_left_button_down(target.position)
 	sender.mouse_left_button_up(target.position)
 
-
-## 中断と再開の確認
-func test_game_save_and_load():
-	pass
 
 ## 指定のシーンがあるなら、trueを返す。
 func _assert_scene(check_name: String) -> bool:

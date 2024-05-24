@@ -5,6 +5,10 @@ extends Node
 
 ## 設定ファイルパスのテンプレート
 const USER_SETTINGS_NAME := "user://user_settings%s.cfg"
+## ユーザー設定ファイルパスを返す。
+var _user_setting_path: String:
+	get:
+		return USER_SETTINGS_NAME % _postfix
 
 ## 設定セクション名
 const SETTING_SECTION_NAME := "play_data"
@@ -43,7 +47,7 @@ func _init_data():
 
 ## 設定を読み込む。
 func load_settings() -> void:
-	var err = _config.load(USER_SETTINGS_NAME % _postfix)
+	var err = _config.load(_user_setting_path)
 	if err != OK:
 		# 初期化
 		_init_data()
@@ -51,19 +55,24 @@ func load_settings() -> void:
 	
 	# データを読み込む
 	_last_scene = _config.get_value(SETTING_SECTION_NAME, LAST_SCENE_KEY, SceneType.TITLE)
-	var destroyed_chrs = _config.get_value(SETTING_SECTION_NAME, DESTROYED_CHARACTERS_KEY, []).split(",")
+	var destroyed_chrs = _config.get_value(SETTING_SECTION_NAME, DESTROYED_CHARACTERS_KEY, "").split(",")
 	_destroyed_characters.clear()
 	for str_index in destroyed_chrs:
 		_destroyed_characters.append(str_index.to_int())
 
 ## 最後に開いていたシーンを読み取って返す。
 func get_last_scene() -> SceneType:
-	print_debug("TODO 未実装")
-	return SceneType.TITLE
+	return _last_scene
 
 ## シーンを切り替えたら呼び出して、最後に開いたシーンを保存する。
 func set_and_save_last_scene(scene: SceneType) -> void:
-	print_debug("TODO 最後に開いたシーンを保存")
+	_last_scene = scene
+	_destroyed_characters.clear()
+
+	# シーンを切り替えたら、撃破データは削除
+	_config.clear()
+	_config.set_value(SETTING_SECTION_NAME, LAST_SCENE_KEY, scene)
+	save()
 
 ## 撃破したキャラのインデックスをリストで返す。
 func get_destroyed_characters() -> Array[int]:
@@ -76,7 +85,10 @@ func set_destroy_character(chr: int) -> void:
 
 ## 登録したキャラのインデックスを保存する。
 func save() -> void:
-	print_debug("TODO 保存実行")
+	var err = _config.save(_user_setting_path)
+	if err != OK:
+		push_error("save %s error." % _user_setting_path)
+
 
 ## デバッグ用の設定ファイルの接尾語を設定して、該当ファイルを読み込み直す。
 func debug_set_postfix(post: String) -> void:
@@ -85,4 +97,5 @@ func debug_set_postfix(post: String) -> void:
 ## 設定ファイルを削除する。
 func delete_save_data() -> void:
 	_config.clear()
+	save()
 

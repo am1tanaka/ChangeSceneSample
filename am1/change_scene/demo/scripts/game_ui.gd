@@ -6,6 +6,7 @@ extends Node
 var _change_started := true
 
 func init_game_ui():
+	UserSettings.set_and_save_last_scene(UserSettings.SceneType.GAME)
 	_change_started = false
 
 func _on_retry():
