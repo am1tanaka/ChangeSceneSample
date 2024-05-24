@@ -125,9 +125,13 @@ func _set_destroyed_characters_to_config() -> void:
 ## デバッグ用の設定ファイルの接尾語を設定して、該当ファイルを読み込み直す。
 func debug_set_postfix(post: String) -> void:
 	_postfix = post
+	_config.clear()
+	_init_data()
+	load_settings()
 
 ## 設定ファイルを削除する。
 func delete_save_data() -> void:
 	_config.clear()
+	_init_data()
 	save()
 

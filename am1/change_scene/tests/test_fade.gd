@@ -14,7 +14,7 @@ func test_fade_anim():
 
 	# フェードが始まっている
 	await wait_seconds(0.25)
-	var color_rect = fade.get_node("ColorRect") as ColorRect
+	var color_rect = fade.get_node("Cover") as ColorRect
 	assert_gt(color_rect.color.a, 0.0, "フェード開始")
 	assert_eq(color_rect.modulate, Color.WHITE, "カバーの色設定")
 	
@@ -48,7 +48,7 @@ func test_fade_immediate():
 	await wait_frames(1)
 
 	assert_true(_immediate_covered, "即時、カバー")
-	var color_rect = fade.get_node("ColorRect") as ColorRect
+	var color_rect = fade.get_node("Cover") as ColorRect
 	assert_eq(color_rect.modulate, Color.RED, "カバーの色が赤")
 	
 	# カバーを外す

@@ -1,6 +1,6 @@
 {
  "background_color": "262626ff",
- "compact_mode": false,
+ "compact_mode": true,
  "configured_dirs": [
   "res://am1/change_scene/tests",
   "res://am1/change_scene/demo/tests"

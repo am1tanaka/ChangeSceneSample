@@ -9,7 +9,13 @@ const TITLE_SCENE := preload("res://am1/change_scene/demo/scenes/title.tscn")
 var _all_scenes_loaded_count := 0
 var _all_scenes_unloaded_count := 0
 
+func before_all():
+	UserSettings.debug_set_postfix("change_test")
+
 func before_each():
+	UserSettings.delete_save_data()
+	UserSettings.load_settings()
+	
 	_title = TITLE_SCENE.instantiate()
 	get_tree().root.add_child(_title)
 	SceneChanger.append_ignore_scene_name("GutRunner")
