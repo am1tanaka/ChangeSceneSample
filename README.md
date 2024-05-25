@@ -1,6 +1,6 @@
 # 【Godot】場面切り替えサンプル
 
-**本リポジトリーは実験段階のものを、参考として公開しています。ご利用の際は、安定版ではないことをご了承ください。**
+**本リポジトリーは、参考のために公開している実験的なものです。構成やクラス名などは、大きく変わる可能性があります。ご了承ください。**
 
 こちらの本の内容を反映させた、起動と、場面切り替え処理のサンプルのGodotプロジェクトです。
 
@@ -152,3 +152,16 @@ Godotで開いて、動作をテストする手順です。
 - Splashスクリーンの画像
   - [KenneyNL. Godot SplashScreens](https://github.com/KenneyNL/Godot-SplashScreens)
     - Screen/Reimagined logo/your-logo-here-dark.png を使用しました
+- Godotアイコン
+  - デフォルトのプロジェクトのもの
+
+## ライセンス
+
+am1フォルダーとdocsフォルダー内のものは、[MIT Licence](./LICENSE)です。
+
+[MIT License](./LICENSE)
+
+Copyright (c) 2024 TANAKA Yu
+
+それ以外のものは、それぞれのフォルダー内をご覧ください。
+
